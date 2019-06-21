@@ -1,0 +1,41 @@
+<html>
+    Hello World
+<body>
+<pre>
+     $!{value1}
+
+    $!{value2}
+
+    colors: $!{colors}
+
+    #macro(render_color $index, $color)
+        Color Render Macro $index, $color
+    #end
+
+    #foreach($color in $colors)
+##        This is Color: $color, $!{foreach.index}
+        #render_color($foreach.index, $color)
+    #end
+
+    #foreach($key in $map.keySet())
+        This is $key: $map.get($key)
+    #end
+
+    User: $!{user.name}
+    $!{user.printName()}
+
+    #set($title = "nowcode_title")
+    Title: !{title}
+
+    Parse: #parse("header.vm")
+
+    #set($hello = "hello")
+    #set($helloword = "$!{hello} world")
+    $!{hello}
+    $!{helloword}
+
+
+</pre>
+
+</body>
+</html>

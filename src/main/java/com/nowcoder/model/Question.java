@@ -1,5 +1,6 @@
 package com.nowcoder.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Question {
@@ -77,5 +78,6 @@ public class Question {
                 ", createdDate=" + createdDate +
                 ", commentCount=" + commentCount +
                 '}';
+
     }
 }

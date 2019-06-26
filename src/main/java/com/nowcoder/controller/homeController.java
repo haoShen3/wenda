@@ -29,13 +29,15 @@ public class homeController {
     @Autowired
     UserService userService;
 
-
+    //主页
     @RequestMapping(path={"/", "/index"}, method = {RequestMethod.GET})
     public String index(Model model){
         model.addAttribute("vos", getQuestions(0, 0, 10));
         return "index";
     }
 
+
+    //用户页面
     @RequestMapping(path = "/user/{userId}", method = {RequestMethod.GET})
     public String userIndex(Model model, @PathVariable("userId") int userId){
         model.addAttribute("vos", getQuestions(userId, 0, 10));

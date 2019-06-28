@@ -20,5 +20,5 @@ public interface LoginTicketDAO {
 
 
     @Update({"update ", TABLENAME, "set status=#{status} where ticket=#{ticket}"})
-    void updateTicket(@Param("ticket") String ticket, @Param("status") String status);
+    void updateTicket(@Param("ticket") String ticket, @Param("status") int status);
 }

@@ -1,5 +1,6 @@
 package com.nowcoder.configuration;
 
+import com.nowcoder.interceptor.LoginReuqiredInterceptor;
 import com.nowcoder.interceptor.PassportInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,14 @@ public class WendaWebConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     PassportInterceptor passportInterceptor;
 
+    @Autowired
+    LoginReuqiredInterceptor loginReuqiredInterceptor;
+
+
     @Override
     public  void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(passportInterceptor);
+        registry.addInterceptor(loginReuqiredInterceptor).addPathPatterns("/user/*");
         super.addInterceptors(registry);
     }
 }

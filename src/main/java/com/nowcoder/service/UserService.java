@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -39,6 +41,15 @@ public class UserService {
         if(StringUtils.isBlank(password)){
             map.put("msg", "密码不能为空");
             return  map;
+        }
+        boolean flag = false;
+        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern regex = Pattern.compile(check);
+        Matcher matcher = regex.matcher(username);
+        flag = matcher.matches();
+        if(!flag){
+            map.put("msg", "请输入正确的邮箱地址");
+            return map;
         }
         User user = userDAO.selectByName(username);
         if(user != null){
@@ -93,5 +104,9 @@ public class UserService {
         loginTicket.setTicket(UUID.randomUUID().toString().replace("-", ""));
         loginTicketService.addTicket(loginTicket);
         return loginTicket.getTicket();
+    }
+
+    public void logout(String ticket) {
+        loginTicketService.updateTicket(ticket, 1);
     }
 }

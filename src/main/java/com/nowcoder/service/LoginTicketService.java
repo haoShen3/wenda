@@ -19,7 +19,7 @@ public class LoginTicketService {
         return loginTicketDAO.selectTicket(ticket);
     }
 
-    public void updateTicket(String ticket, String status){
+    public void updateTicket(String ticket, int status){
         loginTicketDAO.updateTicket(ticket, status);
     }
 }

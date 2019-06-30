@@ -16,10 +16,10 @@ public class LoginTicketService {
     }
 
     public LoginTicket selectTicket(String ticket){
-        return loginTicketDAO.selectTicket(ticket);
+        return loginTicketDAO.selectByTicket(ticket);
     }
 
     public void updateTicket(String ticket, int status){
-        loginTicketDAO.updateTicket(ticket, status);
+        loginTicketDAO.updateStatus(ticket, status);
     }
 }

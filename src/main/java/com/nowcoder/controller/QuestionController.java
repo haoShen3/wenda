@@ -2,6 +2,7 @@ package com.nowcoder.controller;
 
 import com.nowcoder.model.HostHolder;
 import com.nowcoder.model.Question;
+import com.nowcoder.model.ViewObject;
 import com.nowcoder.service.QuestionService;
 import com.nowcoder.service.UserService;
 import com.nowcoder.util.WendaUtil;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by nowcoder on 2016/7/22.
@@ -26,12 +24,18 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-
     @Autowired
     HostHolder hostHolder;
 
     @Autowired
     UserService userService;
+
+    @RequestMapping(value = "/question/{qid}", method = {RequestMethod.GET})
+    public String questionDetail(Model model, @PathVariable("qid") int qid) {
+        Question question = questionService.getById(qid);
+        model.addAttribute("question", question);
+        return "detail";
+    }
 
     @RequestMapping(value = "/question/add", method = {RequestMethod.POST})
     @ResponseBody
@@ -42,8 +46,8 @@ public class QuestionController {
             question.setCreatedDate(new Date());
             question.setTitle(title);
             if (hostHolder.getUsers() == null) {
-                question.setUserId(WendaUtil.ANONYMOUS_USERID);
-                // return WendaUtil.getJSONString(999);
+//                question.setUserId(WendaUtil.ANONYMOUS_USERID);
+                 return WendaUtil.getJSONString(999);
             } else {
                 question.setUserId(hostHolder.getUsers().getId());
             }

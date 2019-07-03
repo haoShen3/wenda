@@ -5,6 +5,7 @@ import com.nowcoder.model.Comment;
 import com.nowcoder.model.EntityType;
 import com.nowcoder.model.HostHolder;
 import com.nowcoder.service.CommentService;
+import com.nowcoder.service.QuestionService;
 import com.nowcoder.service.SensitiveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ public class CommentController {
     @Autowired
     SensitiveService sensitiveService;
 
+    @Autowired
+    QuestionService questionService;
+
     @RequestMapping(path = "/addComment", method = {RequestMethod.POST})
     public String addComment(@RequestParam("questionId") int questionId,
                              @RequestParam("content") String content){
@@ -47,6 +51,12 @@ public class CommentController {
             comment.setEntityId(questionId);
             comment.setEntityType(EntityType.ENTITY_QUESTION);
             commentService.addComment(comment);
+
+            //更新评论数
+            int count = commentService.getCommentCount(comment.getEntityType(), comment.getEntityId());
+            System.out.println(count);
+            questionService.updateCommentCount(comment.getEntityId(), count);
+
         }catch (Exception e){
             logger.error("增加评论失败" + e.getMessage());
         }

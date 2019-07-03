@@ -30,7 +30,9 @@ public class UserService {
         return userDAO.selectById(id);
     }
 
-
+    public User selectByName(String name){
+        return userDAO.selectByName(name);
+    }
     //注册方法
     public Map<String, String> register(String username, String password){
         HashMap<String, String> map = new HashMap<String, String>();

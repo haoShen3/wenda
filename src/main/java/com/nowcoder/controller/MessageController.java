@@ -37,7 +37,26 @@ public class MessageController {
     UserService userService;
 
     @RequestMapping(path = "/msg/list", method = RequestMethod.GET)
-    public String MessageList(){
+    public String MessageList(Model model){
+        if(hostHolder.getUsers() == null){
+            return "redirect:/reglogin";
+        }
+        int localUserId = hostHolder.getUsers().getId();
+        List<Message> messageList = messageService.getConversationList(localUserId, 0, 10);
+        List<ViewObject> messages = new ArrayList<ViewObject>();
+        for(Message message: messageList){
+            ViewObject viewObject = new ViewObject();
+            viewObject.set("conversation", message);
+
+            //列表看到对方传来的信息
+            int targetId = message.getFromId() == localUserId?  message.getToId(): message.getFromId();
+            viewObject.set("user", userService.getUser(targetId));
+
+            viewObject.set("unread", messageService.getConversationUnread(localUserId, message.getConversationId()));
+            messages.add(viewObject);
+        }
+
+        model.addAttribute("conversations", messages);
         return "letter";
     }
 
@@ -53,9 +72,10 @@ public class MessageController {
                 messages.add(viewObject);
             }
             model.addAttribute("messages", messages);
+            messageService.updateUnreadCount(hostHolder.getUsers().getId(), conversationId);
         }catch (Exception e){
             logger.error("查看信息失败" + e.getMessage());
-            return "/";
+            return "redirect:/";
         }
         return "letterDetail";
     }

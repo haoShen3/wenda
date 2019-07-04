@@ -22,9 +22,19 @@ public class MessageService {
         return messageDAO.addMessage(message);
     }
 
-    public List<Message> getConversationDetail(String conversationId, int offet, int limit){
-        return messageDAO.getConversationDetail(conversationId, offet, limit);
+    public List<Message> getConversationDetail(String conversationId, int offset, int limit){
+        return messageDAO.getConversationDetail(conversationId, offset, limit);
     }
 
+    public List<Message> getConversationList(int userId, int offset, int limit){
+        return messageDAO.getConversationList(userId, offset, limit);
+    }
 
+    public int getConversationUnread(int userId, String conversationId){
+        return messageDAO.getConversationUnread(userId, conversationId);
+    }
+
+    public int updateUnreadCount(int userId, String conversationId){
+        return messageDAO.updateUnreadCount(userId, conversationId);
+    }
 }

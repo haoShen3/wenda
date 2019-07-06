@@ -2,6 +2,7 @@ package com.nowcoder.controller;
 
 import com.nowcoder.model.*;
 import com.nowcoder.service.CommentService;
+import com.nowcoder.service.LikeService;
 import com.nowcoder.service.QuestionService;
 import com.nowcoder.service.UserService;
 import com.nowcoder.util.WendaUtil;
@@ -36,6 +37,9 @@ public class QuestionController {
     @Autowired
     CommentService commentService;
 
+    @Autowired
+    LikeService likeService;
+
     @RequestMapping(value = "/question/{qid}", method = {RequestMethod.GET})
     public String questionDetail(Model model, @PathVariable("qid") int qid) {
         Question question = questionService.getById(qid);
@@ -50,6 +54,15 @@ public class QuestionController {
             ViewObject viewObject = new ViewObject();
             viewObject.set("comment", comment);
             viewObject.set("user", userService.getUser(comment.getUserId()));
+
+            //查看该用户对某个评论的点赞状态
+            if(hostHolder.getUsers() == null){
+                viewObject.set("liked", 0);
+            }else{
+                viewObject.set("liked", likeService.getLikeStatus(hostHolder.getUsers().getId(), EntityType.ENTITY_COMMENT, comment.getId()));
+            }
+
+            viewObject.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT, comment.getId()));
             commentList.add(viewObject);
         }
         model.addAttribute("comments", commentList);

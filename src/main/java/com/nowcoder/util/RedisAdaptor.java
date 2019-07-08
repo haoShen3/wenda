@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
+
 
 @Component
 public class RedisAdaptor implements InitializingBean {
@@ -49,6 +51,21 @@ public class RedisAdaptor implements InitializingBean {
         return (long)0;
     }
 
+    public Long lpush(String key, String value){
+        Jedis jedis = null;
+        try{
+            jedis = pool.getResource();
+            return jedis.lpush(key, value);
+        }catch (Exception e){
+            logger.error("jedis 发生异常" + e.getMessage());
+        }finally {
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+        return (long)0;
+    }
+
     public Long srem(String key, String value){
         Jedis jedis = null;
         try{
@@ -77,6 +94,21 @@ public class RedisAdaptor implements InitializingBean {
             }
         }
         return true;
+    }
+
+    public List<String> brpop(int value, String key){
+        Jedis jedis = null;
+        try{
+            jedis = pool.getResource();
+            return jedis.brpop(value, key);
+        }catch (Exception e){
+            logger.error("jedis 发生异常" + e.getMessage());
+        }finally {
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+        return null;
     }
 //    @Test
 //    public static void main(String[] args){

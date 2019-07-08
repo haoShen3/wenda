@@ -16,6 +16,9 @@ public interface CommentDAO {
             "values(#{userId}, #{createdDate}, #{entityId}, #{entityType}, #{status},#{content})"})
     int addComment(Comment comment);
 
+    @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, "where id=#{id}"})
+    Comment getCommentById(int id);
+
     @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME,
             "where entity_type=#{entityType} and entity_id=#{entityId} order by created_date desc" })
     List<Comment> selectCommentByEntity(@Param("entityType") int entityType, @Param("entityId") int entityId);

@@ -2,6 +2,9 @@ package com.nowcoder.controller;
 
 
 import com.nowcoder.aspect.LogAspect;
+import com.nowcoder.async.EventModel;
+import com.nowcoder.async.EventProducer;
+import com.nowcoder.async.EventType;
 import com.nowcoder.service.UserService;
 import com.sun.deploy.net.HttpResponse;
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +27,9 @@ public class registerController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     //注册页面
     @RequestMapping(path={"/reg"}, method = {RequestMethod.POST})
@@ -76,7 +82,15 @@ public class registerController {
             if(map.containsKey("ticket")){
                 Cookie cookie = new Cookie("ticket", map.get("ticket"));
                 cookie.setPath("/");
+                if(rememberme){
+                    cookie.setMaxAge(3600 * 24);
+                }
                 response.addCookie(cookie);
+
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+                        .setExts("username", username).setExts("email", "2457937678@qq.com")
+                        );
+
                 if(StringUtils.isNotBlank(next)){
                     return "redirect:" + next;
                 }

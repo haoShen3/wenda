@@ -1,48 +1,51 @@
 package com.nowcoder.async.handler;
 
+
 import com.nowcoder.async.EventHandler;
 import com.nowcoder.async.EventModel;
 import com.nowcoder.async.EventType;
 import com.nowcoder.model.Message;
+import com.nowcoder.model.Question;
 import com.nowcoder.model.User;
 import com.nowcoder.service.MessageService;
+import com.nowcoder.service.QuestionService;
 import com.nowcoder.service.UserService;
-import com.nowcoder.util.WendaUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static com.nowcoder.util.WendaUtil.SYSTEM_USERID;
 
 @Component
-public class LikeHandler implements EventHandler {
-    @Autowired
-    MessageService messageService;
-
+public class CommentHandler implements EventHandler {
     @Autowired
     UserService userService;
 
+    @Autowired
+    QuestionService questionService;
+
+    @Autowired
+    MessageService messageService;
+
     @Override
     public void doHandler(EventModel eventModel) {
+
+        //有人评论，发送给楼主消息
         Message message = new Message();
-        //消息来自系统，去往评论的 owner
-        message.setFromId(WendaUtil.SYSTEM_USERID);
-        message.setToId(eventModel.getEntityOwnerId());
         message.setCreatedDate(new Date());
-
+        message.setFromId(SYSTEM_USERID);
+        message.setToId(eventModel.getEntityOwnerId());
         User user = userService.getUser(eventModel.getActorId());
-        message.setContent("用户" + user.getName() + "赞了你的评论, question/" +
-                eventModel.getExts("questionId"));
-
-        //添加到 msgList 中
+        Question question = questionService.getById(Integer.parseInt(eventModel.getExts("questionId")));
+        message.setContent("用户" + user.getName() + "评论了你的问题: " + question.getTitle());
         messageService.addMessage(message);
     }
 
     @Override
     public List<EventType> getSupportEventTypes() {
-        return Arrays.asList(EventType.LIKE);
+        return Arrays.asList(EventType.COMMENT);
     }
 }

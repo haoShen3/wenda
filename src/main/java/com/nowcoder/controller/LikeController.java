@@ -40,6 +40,7 @@ public class LikeController {
             return WendaUtil.getJSONString(999);
         }
 
+        //异步处理
         Comment comment = commentService.getCommmentById(commentId);
         eventProducer.fireEvent(new EventModel(EventType.LIKE)
                 .setActorId(hostHolder.getUsers().getId()).setEntityOwnerId(comment.getUserId())

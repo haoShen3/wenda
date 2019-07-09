@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+
+//邮件发送
+//@Component
 public class LoginExceptionHandler implements EventHandler {
     @Autowired
     MailSender mailSender;

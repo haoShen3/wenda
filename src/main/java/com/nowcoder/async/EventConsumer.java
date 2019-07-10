@@ -59,6 +59,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
                             continue;
                         }
                         EventModel eventModel = JSON.parseObject(message, EventModel.class);
+                        System.out.println(eventModel);
                         if(!config.containsKey(eventModel.getType())){
                             logger.error("获取失败，不能识别的类型");
                             continue;

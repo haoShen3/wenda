@@ -82,4 +82,16 @@ public class EventModel {
     public void setExts(Map<String, String> exts) {
         this.exts = exts;
     }
+
+    @Override
+    public String toString() {
+        return "EventModel{" +
+                "type=" + type +
+                ", actorId=" + actorId +
+                ", entityType=" + entityType +
+                ", entityId=" + entityId +
+                ", entityOwnerId=" + entityOwnerId +
+                ", exts=" + exts +
+                '}';
+    }
 }

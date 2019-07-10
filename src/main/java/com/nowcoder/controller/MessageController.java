@@ -72,7 +72,8 @@ public class MessageController {
                 messages.add(viewObject);
             }
             model.addAttribute("messages", messages);
-            messageService.updateUnreadCount(hostHolder.getUsers().getId(), conversationId);
+            int i = hostHolder.getUsers().getId();
+            messageService.updateUnreadCount(i, conversationId);
         }catch (Exception e){
             logger.error("查看信息失败" + e.getMessage());
             return "redirect:/";

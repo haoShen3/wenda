@@ -125,8 +125,23 @@ public class RedisAdaptor implements InitializingBean {
             if(jedis != null){
                 jedis.close();
             }
-            return 0;
         }
+        return 0;
+    }
+
+    public long zrem(String key, String value){
+        Jedis jedis = null;
+        try{
+            jedis = getJedis();
+            return jedis.zrem(key, value);
+        }catch (Exception e){
+            logger.error("发生异常" + e.getMessage());
+        }finally {
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+        return 0;
     }
 
     public Set<String> zrevrange(String key, int start, int end){
@@ -140,11 +155,11 @@ public class RedisAdaptor implements InitializingBean {
             if(jedis != null){
                 jedis.close();
             }
-            return null;
         }
+        return null;
     }
 
-    public Long zcard(String key){
+    public long zcard(String key){
         Jedis jedis = null;
         try{
             jedis = getJedis();
@@ -155,8 +170,8 @@ public class RedisAdaptor implements InitializingBean {
             if(jedis != null){
                 jedis.close();
             }
-            return null;
         }
+        return 0;
     }
 
     public Double zscore(String key, String userId){
@@ -170,8 +185,8 @@ public class RedisAdaptor implements InitializingBean {
             if(jedis != null){
                 jedis.close();
             }
-            return null;
         }
+        return null;
     }
 
     public Jedis getJedis(){
@@ -184,8 +199,8 @@ public class RedisAdaptor implements InitializingBean {
         }catch (Exception e){
             logger.error("开启事务发生异常" + e.getMessage()) ;
         }finally {
-            return null;
         }
+        return null;
     }
 
     public List<Object> exec(Transaction transaction, Jedis jedis){
@@ -204,8 +219,8 @@ public class RedisAdaptor implements InitializingBean {
             if(jedis != null){
                 jedis.close();
             }
-            return null;
         }
+        return null;
     }
 //    @Test
 //    public static void main(String[] args){

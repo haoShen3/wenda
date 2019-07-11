@@ -15,6 +15,9 @@ public class CommentService {
     @Autowired
     CommentDAO commentDAO;
 
+    public int getUserCommentCount(int userId){
+        return commentDAO.getUserCommentCount(userId);
+    }
 
     public int addComment(Comment comment){
         return commentDAO.addComment(comment);

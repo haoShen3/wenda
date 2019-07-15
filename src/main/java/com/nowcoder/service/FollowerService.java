@@ -25,9 +25,9 @@ public class FollowerService {
         Jedis jedis = redisAdaptor.getJedis();
         Transaction tx = redisAdaptor.multi(jedis);
         //粉丝集合
-        tx.zadd(folloerKey, date.getTime(), String.valueOf(userId));
+        redisAdaptor.zadd(folloerKey, date.getTime(), String.valueOf(userId));
         //关注对象集合
-        tx.zadd(folloeeKey, date.getTime(), String.valueOf(entityId));
+        redisAdaptor.zadd(folloeeKey, date.getTime(), String.valueOf(entityId));
         List<Object> ret = redisAdaptor.exec(tx, jedis);
         return ret.size() == 2 && (Long)ret.get(0) > 0 && (Long)ret.get(1) > 0;
     }
@@ -38,9 +38,9 @@ public class FollowerService {
         Jedis jedis = redisAdaptor.getJedis();
         Transaction tx = redisAdaptor.multi(jedis);
         //粉丝集合
-        tx.zrem(folloerKey, String.valueOf(userId));
+        redisAdaptor.zrem(folloerKey, String.valueOf(userId));
         //关注对象集合
-        tx.zrem(folloeeKey, String.valueOf(entityId));
+        redisAdaptor.zrem(folloeeKey, String.valueOf(entityId));
         List<Object> ret = redisAdaptor.exec(tx, jedis);
         return ret.size() == 2 && (Long)ret.get(0) > 0 && (Long)ret.get(1) > 0;
     }
@@ -48,6 +48,7 @@ public class FollowerService {
     private List<Integer> getIdsFromSet(Set<String> idset){
         List<Integer> ids = new ArrayList<>();
         for(String str: idset){
+            System.out.println(str);
             ids.add(Integer.parseInt(str));
         }
         return ids;

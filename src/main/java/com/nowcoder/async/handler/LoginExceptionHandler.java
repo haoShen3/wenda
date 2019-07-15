@@ -16,7 +16,7 @@ import java.util.Map;
 
 
 //邮件发送
-//@Component
+@Component
 public class LoginExceptionHandler implements EventHandler {
     @Autowired
     MailSender mailSender;
@@ -25,10 +25,10 @@ public class LoginExceptionHandler implements EventHandler {
     @Override
     public void doHandler(EventModel eventModel) {
             //xxx判断用户登录异常
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("username", eventModel.getExts("username"));
-        mailSender.sendWithHTMLTemplate(eventModel.getExts("email"), "登录ID异常",
-                "mails/login_exception.html", map);
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("username", eventModel.getExts("username"));
+//        mailSender.sendWithHTMLTemplate(eventModel.getExts("email"), "登录ID异常",
+//                "mails/login_exception.html", map);
     }
 
     @Override

@@ -12,7 +12,7 @@ public class WendaUtil {
     private static final Logger logger = LoggerFactory.getLogger(WendaUtil.class);
 
     public static int ANONYMOUS_USERID = 3;
-    public static int SYSTEM_USERID = 4;
+    public static int SYSTEM_USERID = 0;
 
 
     public static String getJSONString(int code) {

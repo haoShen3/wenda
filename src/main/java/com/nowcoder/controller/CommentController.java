@@ -64,9 +64,9 @@ public class CommentController {
             questionService.updateCommentCount(comment.getEntityId(), count);
 
             //发送站内信给楼主
-            eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(hostHolder.getUsers().getId())
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getId())
                 .setEntityOwnerId(questionService.getById(questionId).getId())
-                    .setExts("questionId", String.valueOf(questionId)));
+                    .setExts("questionId", String.valueOf(questionId)).setEntityId(questionId));
 
         }catch (Exception e){
             logger.error("增加评论失败" + e.getMessage());

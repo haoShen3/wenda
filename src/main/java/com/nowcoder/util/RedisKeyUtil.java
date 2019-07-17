@@ -6,8 +6,10 @@ public class RedisKeyUtil {
     private static String BIZ_LIKE = "LIKE";
     private static String BIZ_DISLIKE = "DISLIKE";
     private static String BIZ_EVENTQUEUE = "EVENT_QUEUE";
-    private static String BIZ_FOLLOWER = "EVENT_QUEUE";
-    private static String BIZ_FOLLOWEE = "EVENT_QUEUE";
+    private static String BIZ_FOLLOWER = "FOLLOWER";
+    private static String BIZ_FOLLOWEE = "FOLLOWEE";
+    private static String BIZ_TIMELINE = "TIMELINE";
+
 
     //某一个用户关注的某一个实体队列
     public static String getBizFollowee(int userId, int entityType){
@@ -29,5 +31,9 @@ public class RedisKeyUtil {
 
     public static String getEventQueue(){
         return BIZ_EVENTQUEUE;
+    }
+
+    public static String getBizTimeline(int userId){
+        return BIZ_DISLIKE + SPLIT + String.valueOf(userId);
     }
 }

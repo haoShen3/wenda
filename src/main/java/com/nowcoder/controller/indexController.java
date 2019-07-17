@@ -24,6 +24,7 @@ public class indexController {
         return "Hello NowCoder" + httpSession.getAttribute("msg");
     }
 
+
     @RequestMapping(path={"/profile/{userId}"})
     @ResponseBody
     public String profile(@PathVariable("userId") int userId,

@@ -14,6 +14,7 @@ import com.nowcoder.service.QuestionService;
 import com.nowcoder.service.UserService;
 import com.nowcoder.util.RedisAdaptor;
 import com.nowcoder.util.RedisKeyUtil;
+import com.nowcoder.util.WendaUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -80,7 +81,7 @@ public class FeedHandler implements EventHandler {
 
         //推模式，推到每个关注用户的缓存队列中
         List<Integer> followers = followerService.getFollowers(EntityType.ENTITY_USER, eventModel.getActorId(),Integer.MAX_VALUE);
-        followers.add(0);//系统用户，没登录时只能看系统队列
+        followers.add(WendaUtil.SYSTEM_USERID);//系统用户，没登录时只能看系统队列
         for(int follower: followers){
             String timelineKey = RedisKeyUtil.getBizTimeline(follower);
             redisAdaptor.lpush(timelineKey, String.valueOf(feed.getId()));

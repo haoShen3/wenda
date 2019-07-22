@@ -51,7 +51,7 @@ public class FeedController {
     @RequestMapping(path = "/pushFeeds", method = {RequestMethod.GET})
     public String getPushFeeds(Model model){
         int userId = hostHolder.getUsers() == null? 0: hostHolder.getUsers().getId();
-        List<String>  feedIds = redisAdaptor.lrange(RedisKeyUtil.getBizTimeline(userId), 0, 10);
+        List<String>  feedIds = redisAdaptor.lrange(RedisKeyUtil.getTimelineKey(userId), 0, 10);
         List<Feed> feeds = new ArrayList<Feed>();
         for(String key: feedIds){
             Feed feed = feedService.getFeedById(Integer.parseInt(key));

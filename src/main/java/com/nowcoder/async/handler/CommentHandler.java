@@ -38,9 +38,9 @@ public class CommentHandler implements EventHandler {
         message.setCreatedDate(new Date());
         message.setFromId(SYSTEM_USERID);
         message.setToId(eventModel.getEntityOwnerId());
-        User user = userService.getUser(eventModel.getActorId());
+//        User user = userService.getUser(eventModel.getActorId());
         Question question = questionService.getById(Integer.parseInt(eventModel.getExts("questionId")));
-        message.setContent("用户" + user.getName() + "评论了你的问题: " + question.getTitle());
+        message.setContent("你的问题 "+ question.getTitle() + "被人评论了，快去看看吧");
         messageService.addMessage(message);
     }
 

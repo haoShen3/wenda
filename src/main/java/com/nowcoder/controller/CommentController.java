@@ -10,6 +10,7 @@ import com.nowcoder.model.HostHolder;
 import com.nowcoder.service.CommentService;
 import com.nowcoder.service.QuestionService;
 import com.nowcoder.service.SensitiveService;
+import com.nowcoder.util.WendaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,8 @@ public class CommentController {
             if(hostHolder.getUsers() != null){
                 comment.setUserId(hostHolder.getUsers().getId());
             }else {
-                return "redirect:/reglogin";
+                comment.setUserId(WendaUtil.ANONYMOUS_USERID);
+//                return "redirect:/reglogin";
             }
             comment.setCreatedDate(new Date());
             comment.setEntityId(questionId);
@@ -72,7 +74,16 @@ public class CommentController {
             logger.error("增加评论失败" + e.getMessage());
         }
         return "redirect:/question/" + questionId;
+    }
 
-
+    @RequestMapping(path = "/deleteComment", method = {RequestMethod.POST})
+    public String deleteComment(@RequestParam("commentId") int commentId,
+                                @RequestParam("questionId") int questionId){
+        try{
+            commentService.deleteComment(1, commentId);
+        }catch (Exception e){
+            logger.error("删除评论失败" + e.getMessage());
+        }
+        return "redirect:/question/" + questionId;
     }
 }

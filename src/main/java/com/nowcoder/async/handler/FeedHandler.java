@@ -73,6 +73,7 @@ public class FeedHandler implements EventHandler {
         feed.setType(eventModel.getType().getValue());
         feed.setUserId(eventModel.getActorId());
         feed.setData(buildFeedData(eventModel));
+        feed.setUserId(eventModel.getActorId());
         if(feed.getData() == null){
             return;
         }
@@ -83,7 +84,7 @@ public class FeedHandler implements EventHandler {
         List<Integer> followers = followerService.getFollowers(EntityType.ENTITY_USER, eventModel.getActorId(),Integer.MAX_VALUE);
         followers.add(WendaUtil.SYSTEM_USERID);//系统用户，没登录时只能看系统队列
         for(int follower: followers){
-            String timelineKey = RedisKeyUtil.getBizTimeline(follower);
+            String timelineKey = RedisKeyUtil.getTimelineKey(follower);
             redisAdaptor.lpush(timelineKey, String.valueOf(feed.getId()));
         }
 

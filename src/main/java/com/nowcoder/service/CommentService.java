@@ -31,11 +31,11 @@ public class CommentService {
         return commentDAO.getCommentCount(entityType, entityId);
     }
 
-    public Comment getCommmentById(int id){
+    public Comment getCommentById(int id){
         return commentDAO.getCommentById(id);
     }
 
-    public boolean updateStatus(int status, int id){
+    public boolean deleteComment(int status, int id){
         return commentDAO.updateStatus(status, id) > 0;
     }
 }

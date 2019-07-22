@@ -101,8 +101,8 @@ public class QuestionController {
             question.setCreatedDate(new Date());
             question.setTitle(title);
             if (hostHolder.getUsers() == null) {
-//                question.setUserId(WendaUtil.ANONYMOUS_USERID);
-                 return WendaUtil.getJSONString(999);
+                question.setUserId(WendaUtil.ANONYMOUS_USERID);
+//                 return WendaUtil.getJSONString(999);
             } else {
                 question.setUserId(hostHolder.getUsers().getId());
             }

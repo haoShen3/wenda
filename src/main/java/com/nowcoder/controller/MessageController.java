@@ -6,6 +6,7 @@ import com.nowcoder.model.Message;
 import com.nowcoder.model.User;
 import com.nowcoder.model.ViewObject;
 import com.nowcoder.service.MessageService;
+import com.nowcoder.service.SensitiveService;
 import com.nowcoder.service.UserService;
 import com.nowcoder.util.WendaUtil;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class MessageController {
     MessageService messageService;
 
     @Autowired
+    SensitiveService sensitiveService;
+
+    @Autowired
     HostHolder hostHolder;
 
     @Autowired
@@ -51,8 +55,7 @@ public class MessageController {
             //列表看到对方传来的信息
             int targetId = message.getFromId() == localUserId?  message.getToId(): message.getFromId();
             viewObject.set("user", userService.getUser(targetId));
-
-            viewObject.set("unread", messageService.getConversationUnread(localUserId, message.getConversationId()));
+            viewObject.set("unread", messageService.getConversationUnreadCount(localUserId, message.getConversationId()));
             messages.add(viewObject);
         }
 
@@ -72,8 +75,12 @@ public class MessageController {
                 messages.add(viewObject);
             }
             model.addAttribute("messages", messages);
-            int i = hostHolder.getUsers().getId();
-            messageService.updateUnreadCount(i, conversationId);
+            if(hostHolder.getUsers() == null){
+                return WendaUtil.getJSONString(999, "用户未登录");
+            }
+            int j = hostHolder.getUsers().getId();
+            boolean i = messageService.updateUnreadCount(j, conversationId);
+            System.out.println(i);
         }catch (Exception e){
             logger.error("查看信息失败" + e.getMessage());
             return "redirect:/";
@@ -90,6 +97,7 @@ public class MessageController {
             return WendaUtil.getJSONString(999, "用户未登录");
         }
         try {
+            content = sensitiveService.filter(content);
             Message message = new Message();
             User user = userService.selectByName(toName);
             message.setContent(content);

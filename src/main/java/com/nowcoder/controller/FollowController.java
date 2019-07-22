@@ -41,13 +41,14 @@ public class FollowController {
     @Autowired
     EventProducer eventProducer;
 
-    @RequestMapping(path = "/followUser", method = {RequestMethod.POST})
+    @RequestMapping(path = "/followUser", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public String followUser(@RequestParam("userId") int userId){
         if(hostHolder.getUsers() == null){
             return WendaUtil.getJSONString(999);
         }
         boolean ret = followerService.follow(hostHolder.getUsers().getId(), EntityType.ENTITY_USER, userId);
+
         eventProducer.fireEvent(new EventModel(EventType.FOLLOW)
                 .setActorId(hostHolder.getUsers().getId()).setEntityId(userId)
             .setEntityType(EntityType.ENTITY_USER).setEntityOwnerId(userId));
@@ -62,6 +63,7 @@ public class FollowController {
             return WendaUtil.getJSONString(999);
         }
         boolean ret = followerService.unfollow(hostHolder.getUsers().getId(), EntityType.ENTITY_USER, userId);
+
         eventProducer.fireEvent(new EventModel(EventType.UNFOLLOW)
                 .setActorId(hostHolder.getUsers().getId()).setEntityId(userId)
                 .setEntityType(EntityType.ENTITY_USER).setEntityOwnerId(userId));
@@ -69,7 +71,7 @@ public class FollowController {
                 , String.valueOf(followerService.getFolloweesCount(EntityType.ENTITY_USER, hostHolder.getUsers().getId())));
     }
 
-    @RequestMapping(path = "/followQuestion", method = {RequestMethod.POST})
+    @RequestMapping(path = "/followQuestion", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public String followQuestion(@RequestParam("questionId") int questionId){
         if(hostHolder.getUsers() == null){
@@ -116,11 +118,11 @@ public class FollowController {
 
     @RequestMapping(path ={"/user/{uid}/followees"}, method = {RequestMethod.GET})
     public String followees(Model model,@PathVariable("uid") int uid){
-        List<Integer> followeesIds = followerService.getFollowees(EntityType.ENTITY_QUESTION, uid, 0, 10);
+        List<Integer> followeeIds = followerService.getFollowees(EntityType.ENTITY_USER, uid, 0, 10);
         if(hostHolder.getUsers() != null){
-            model.addAttribute("followees", getUsersInfo(hostHolder.getUsers().getId(), followeesIds));
+            model.addAttribute("followees", getUsersInfo(hostHolder.getUsers().getId(), followeeIds));
         }else{
-            model.addAttribute("followees", getUsersInfo(0, followeesIds));
+            model.addAttribute("followees", getUsersInfo(0, followeeIds));
         }
         model.addAttribute("followeeCount", followerService.getFolloweesCount(EntityType.ENTITY_USER, uid));
         model.addAttribute("curUser", userService.getUser(uid));
@@ -129,12 +131,13 @@ public class FollowController {
 
     @RequestMapping(path ={"/user/{uid}/followers"}, method = {RequestMethod.GET})
     public String followers(Model model, @PathVariable("uid") int uid){
-        List<Integer> followersIds = followerService.getFollowers(EntityType.ENTITY_QUESTION, uid, 0, 10);
+        List<Integer> followersIds = followerService.getFollowers(EntityType.ENTITY_USER, uid, 0, 10);
         if(hostHolder.getUsers() != null){
             model.addAttribute("followers", getUsersInfo(hostHolder.getUsers().getId(), followersIds));
         }else{
             model.addAttribute("followers", getUsersInfo(0, followersIds));
         }
+        Long i = followerService.getFollowersCount(EntityType.ENTITY_USER, uid);
         model.addAttribute("followerCount", followerService.getFollowersCount(EntityType.ENTITY_USER, uid));
         model.addAttribute("curUser", userService.getUser(uid));
         return "followers";

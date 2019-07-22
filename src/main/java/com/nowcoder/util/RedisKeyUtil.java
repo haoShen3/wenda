@@ -33,7 +33,7 @@ public class RedisKeyUtil {
         return BIZ_EVENTQUEUE;
     }
 
-    public static String getBizTimeline(int userId){
-        return BIZ_DISLIKE + SPLIT + String.valueOf(userId);
+    public static String getTimelineKey(int userId){
+        return BIZ_TIMELINE + SPLIT + String.valueOf(userId);
     }
 }

@@ -41,7 +41,7 @@ public class LikeController {
         }
 
         //异步处理
-        Comment comment = commentService.getCommmentById(commentId);
+        Comment comment = commentService.getCommentById(commentId);
         eventProducer.fireEvent(new EventModel(EventType.LIKE)
                 .setActorId(hostHolder.getUsers().getId()).setEntityOwnerId(comment.getUserId())
         .setEntityType(EntityType.ENTITY_COMMENT).setEntityId(commentId)

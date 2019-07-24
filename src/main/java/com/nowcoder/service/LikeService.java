@@ -17,6 +17,11 @@ public class LikeService {
         return redisAdaptor.scard(likeKey);
     }
 
+    public long getDislikeCount(int entityType, int entityId){
+        String dislikeKey = RedisKeyUtil.getDisLikeKey(entityType, entityId);
+        return redisAdaptor.scard(dislikeKey);
+    }
+
     //查看一个用户是否点赞
     public long getLikeStatus(int userId, int entityType, int entityId){
         String likeKey = RedisKeyUtil.getLikeKey(entityType, entityId);

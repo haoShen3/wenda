@@ -24,6 +24,41 @@ public class RedisAdaptor implements InitializingBean {
 
     }
 
+    public void setCount(String key, String value){
+        Jedis jedis = null;
+        try{
+            jedis = pool.getResource();
+            jedis.set(key, value);
+        }catch (Exception e){
+            logger.error("redis 发生异常" + e.getMessage());
+        }
+        finally {
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
+
+    public String getCount(String key){
+        Jedis jedis = null;
+        try{
+            jedis = pool.getResource();
+            if(jedis.get(key) == null){
+                return "0";
+            }else{
+                return jedis.get(key);
+            }
+        }catch (Exception e){
+            logger.error("redis 发生异常" + e.getMessage());
+        }finally {
+            if(jedis != null) {
+                jedis.close();
+            }
+        }
+        return "0";
+    }
+
+    //设置浏览数
     public Long sadd(String key, String value){
         Jedis jedis = null;
         try{

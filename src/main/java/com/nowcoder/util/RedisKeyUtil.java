@@ -9,11 +9,15 @@ public class RedisKeyUtil {
     private static String BIZ_FOLLOWER = "FOLLOWER";
     private static String BIZ_FOLLOWEE = "FOLLOWEE";
     private static String BIZ_TIMELINE = "TIMELINE";
-
+    private static String BIZ_VIEWING = "VIEWING";
 
     //某一个用户关注的某一个实体队列
     public static String getBizFollowee(int userId, int entityType){
         return BIZ_FOLLOWEE + SPLIT + String.valueOf(entityType) + SPLIT + String.valueOf(userId);
+    }
+
+    public static String getViewKey(int questionId){
+        return BIZ_VIEWING + SPLIT + String.valueOf(questionId);
     }
 
     //所有粉丝的队列

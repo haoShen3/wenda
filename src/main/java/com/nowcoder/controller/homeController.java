@@ -1,14 +1,8 @@
 package com.nowcoder.controller;
 
 import com.nowcoder.dao.QuestionDAO;
-import com.nowcoder.model.Comment;
-import com.nowcoder.model.EntityType;
-import com.nowcoder.model.Question;
-import com.nowcoder.model.ViewObject;
-import com.nowcoder.service.CommentService;
-import com.nowcoder.service.LikeService;
-import com.nowcoder.service.QuestionService;
-import com.nowcoder.service.UserService;
+import com.nowcoder.model.*;
+import com.nowcoder.service.*;
 import com.nowcoder.util.RedisAdaptor;
 import com.nowcoder.util.RedisKeyUtil;
 import org.apache.ibatis.annotations.Param;
@@ -22,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import javax.swing.text.View;
+import javax.swing.text.html.parser.Entity;
+import javax.xml.ws.Holder;
 import java.util.*;
 
 
@@ -43,6 +39,12 @@ public class homeController {
     @Autowired
     LikeService likeService;
 
+    @Autowired
+    FollowerService followerService;
+
+    @Autowired
+    HostHolder hostHolder;
+
     //主页
     @RequestMapping(path={"/", "/index"}, method = {RequestMethod.GET})
     public String index(Model model){
@@ -55,7 +57,20 @@ public class homeController {
     @RequestMapping(path = "/user/{userId}", method = {RequestMethod.GET})
     public String userIndex(Model model, @PathVariable("userId") int userId){
         model.addAttribute("vos", getQuestions(userId, 0, 10));
-        return "index";
+
+        User user = userService.getUser(userId);
+        ViewObject viewObject = new ViewObject();
+        viewObject.set("user", user);
+        viewObject.set("commentCount", commentService.getUserCommentCount(userId));
+        viewObject.set("followerCount", followerService.getFollowersCount(EntityType.ENTITY_USER, userId));
+        viewObject.set("followeeCount", followerService.getFolloweesCount(EntityType.ENTITY_USER, userId));
+        if(hostHolder.getUsers() != null){
+            viewObject.set("followed", followerService.isFollower(hostHolder.getUsers().getId(), EntityType.ENTITY_USER, userId));
+        }else{
+            viewObject.set("followed", false);
+        }
+        model.addAttribute("profileUser", viewObject);
+        return "profile";
     }
 
     @RequestMapping(path = "/personal", method = {RequestMethod.GET})
@@ -110,6 +125,7 @@ public class homeController {
             ViewObject viewObject = new ViewObject();
             viewObject.set("question", question);
             viewObject.set("user", userService.getUser(question.getUserId()));
+            viewObject.set("followCount", followerService.getFollowersCount(EntityType.ENTITY_USER, userId));
             viewObjects.add(viewObject);
         }
         return viewObjects;

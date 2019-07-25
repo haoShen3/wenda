@@ -137,7 +137,6 @@ public class FollowController {
         }else{
             model.addAttribute("followers", getUsersInfo(0, followersIds));
         }
-        Long i = followerService.getFollowersCount(EntityType.ENTITY_USER, uid);
         model.addAttribute("followerCount", followerService.getFollowersCount(EntityType.ENTITY_USER, uid));
         model.addAttribute("curUser", userService.getUser(uid));
         return "followers";

@@ -2,6 +2,7 @@ package com.nowcoder.controller;
 
 import com.nowcoder.model.*;
 import com.nowcoder.service.*;
+import com.nowcoder.util.RedisKeyUtil;
 import com.nowcoder.util.WendaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,9 @@ import java.util.List;
 @Controller
 public class QuestionController {
     private static final Logger logger = LoggerFactory.getLogger(homeController.class);
+
+    @Autowired
+    ViewService viewService;
 
     @Autowired
     QuestionService questionService;
@@ -89,6 +93,10 @@ public class QuestionController {
         }else{
             model.addAttribute("followed", false);
         }
+        String viewKey = RedisKeyUtil.getViewKey(qid);
+        int count = viewService.getCount(viewKey);
+        viewService.setCount(viewKey, String.valueOf(count + 1));
+        model.addAttribute("viewCount", count+1);
         return "detail";
     }
 

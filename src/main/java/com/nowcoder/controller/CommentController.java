@@ -54,7 +54,6 @@ public class CommentController {
                 comment.setUserId(hostHolder.getUsers().getId());
             }else {
                 comment.setUserId(WendaUtil.ANONYMOUS_USERID);
-//                return "redirect:/reglogin";
             }
             comment.setCreatedDate(new Date());
             comment.setEntityId(questionId);
@@ -66,7 +65,7 @@ public class CommentController {
             questionService.updateCommentCount(comment.getEntityId(), count);
 
             //发送站内信给楼主
-            eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getId())
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getUserId())
                 .setEntityOwnerId(questionService.getById(questionId).getId())
                     .setExts("questionId", String.valueOf(questionId)).setEntityId(questionId));
 

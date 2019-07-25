@@ -69,7 +69,6 @@ public class registerController {
 
     }
 
-
     @RequestMapping(path={"/login"}, method = {RequestMethod.POST})
     public String login(@RequestParam("password") String password,
                            @RequestParam("username") String username,

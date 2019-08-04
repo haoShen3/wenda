@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 import java.util.logging.Handler;
 
 @Service
@@ -47,11 +48,12 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
             }
         }
 
-        Thread thread = new Thread(new Runnable() {
+        ExecutorService pool =  Executors.newFixedThreadPool(10);
+        pool.execute(new Runnable() {
             @Override
             public void run() {
-                //开启无限循环，等待 event
                 while (true){
+                    System.out.println("success");
                     String key = RedisKeyUtil.getEventQueue();
                     List<String> events = redisAdaptor.brpop(0, key);
                     for(String message: events){
@@ -71,7 +73,31 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
                 }
             }
         });
-        thread.start();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                //开启无限循环，等待 event
+//                while (true){
+//                    String key = RedisKeyUtil.getEventQueue();
+//                    List<String> events = redisAdaptor.brpop(0, key);
+//                    for(String message: events){
+//                        if(message.equals(key)){
+//                            continue;
+//                        }
+//                        EventModel eventModel = JSON.parseObject(message, EventModel.class);
+//                        if(!config.containsKey(eventModel.getType())){
+//                            logger.error("获取失败，不能识别的类型");
+//                            continue;
+//                        }
+//                        //根据 event 的类型，从 map 找到对应的 handler 集合
+//                        for(EventHandler handler: config.get(eventModel.getType())){
+//                            handler.doHandler(eventModel);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        thread.start();
     }
 
 

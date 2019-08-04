@@ -49,7 +49,6 @@ public class FollowerService {
     private List<Integer> getIdsFromSet(Set<String> idset){
         List<Integer> ids = new ArrayList<>();
         for(String str: idset){
-            System.out.println(str);
             ids.add(Integer.parseInt(str));
         }
         return ids;

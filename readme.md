@@ -14,5 +14,6 @@ Project Implementation:
   * Use SpringBoot, Mybatis to build website<br>
   * Use md5 and salt to encrypt user's passwrod<br>
   * Use trie to filter sensitive word<br>
-  * Use Redis to implement asynchronous framework for sending email
+  * Use Redis to implement asynchronous framework for sending email and feeds
+  * Build feed system based on push and pull
   * Use Crawler for data capture and import<br>

@@ -8,12 +8,12 @@ Project Function:
   * E-mail notification<br>
   * User attention, fan list<br>
   * Timeline implementation<br>
-
+  * Question sort by created time and likes number and so on. 
 ----------------
 Project Implementation:
   * Use SpringBoot, Mybatis to build website<br>
   * Use md5 and salt to encrypt user's passwrod<br>
   * Use trie to filter sensitive word<br>
-  * Use Redis to implement asynchronous framework for sending email and feeds
+  * Use Redis to implement asynchronous framework for sending email and creating feeds
   * Build feed system based on push and pull
   * Use Crawler for data capture and import<br>
